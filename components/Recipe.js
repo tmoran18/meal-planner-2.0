@@ -1,27 +1,28 @@
 import { useState } from 'react'
 import { Box, Heading, useBoolean, Fade } from '@chakra-ui/react'
-import {
-  AddIcon,
-  DeleteIcon,
-  ViewIcon,
-  EditIcon,
-  MinusIcon,
-} from '@chakra-ui/icons'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
 
-const Recipe = ({ id, name, name_secondary, imgurl }) => {
+const Recipe = ({
+  id,
+  name,
+  name_secondary,
+  imgurl,
+  addRecipeSelectedRecipes,
+  removeRecipeSelectedRecipes,
+}) => {
   const [overlayOpacity, setoverlayOpacity] = useState('0.00')
   const [isHover, setIsHover] = useState(false)
   const [isSelected, setIsSelected] = useBoolean()
 
   const addSelected = (id) => {
     setIsSelected.on
-    console.log(id)
+    addRecipeSelectedRecipes(id)
   }
 
   const removeSelected = (id) => {
     setIsSelected.off
-    console.log(id)
+    removeRecipeSelectedRecipes(id)
   }
 
   const onHover = (e) => {

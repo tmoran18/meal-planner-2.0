@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { supabase } from '../utils/supabaseClient'
@@ -8,6 +8,19 @@ import Navbar from '../components/Navbar'
 import Recipe from '../components/Recipe'
 
 export default function Home({ data }) {
+  const [selectedRecipes, setSelectedRecipes] = React.useState([])
+
+  const addRecipeSelectedRecipes = (recipeID) => {
+    setSelectedRecipes((selectedRecipes) => [...selectedRecipes, recipeID])
+  }
+
+  const removeRecipeSelectedRecipes = (recipeID) => {
+    setSelectedRecipes(
+      selectedRecipes.filter(
+        (selectedRecipeID) => recipeID !== selectedRecipeID
+      )
+    )
+  }
   return (
     <>
       <Navbar />
@@ -27,6 +40,8 @@ export default function Home({ data }) {
                   name={recipe.name}
                   name_secondary={recipe.name_secondary}
                   imgurl={recipe.imgurl}
+                  addRecipeSelectedRecipes={addRecipeSelectedRecipes}
+                  removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
                 />
               </>
             )
