@@ -39,9 +39,15 @@ const Recipe = ({
     <Box
       maxW='320px'
       minH='300px'
-      shadow='xl'
+      boxShadow={
+        isSelected
+          ? '0 7px 13px rgba(0,0,0,0.15), 0 15px 40px rgba(0,0,0,0.2)'
+          : '0 7px 13px rgba(154,160,185,0.15), 0 15px 40px rgba(166,173,201,0.2)'
+      }
+      borderRadius={5}
+      overflow='hidden'
       textAlign='center'
-      bg={isSelected && 'green.100'}
+      bg={isSelected && 'rgba(136, 188, 127, 0.30)'}
       cursor='pointer'
       onMouseEnter={onHover}
       onMouseLeave={onHover}
