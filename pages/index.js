@@ -1,15 +1,17 @@
 import Head from 'next/head'
-import React from 'react'
-import Image from 'next/image'
+import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { supabase } from '../utils/supabaseClient'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
 import Navbar from '../components/Navbar'
 import Recipe from '../components/Recipe'
 import SelectedRecipesBadge from '../components/SelectedRecipesBadge'
+import Hero from '../components/Hero'
 
 export default function Home({ data }) {
-  const [selectedRecipes, setSelectedRecipes] = React.useState([])
+  const [selectedRecipes, setSelectedRecipes] = useState([])
+  const [shoppingList, setShoppingList] = useState([])
+  const [test, setTest] = useState([])
 
   const addRecipeSelectedRecipes = (recipeID) => {
     setSelectedRecipes((selectedRecipes) => [...selectedRecipes, recipeID])
@@ -22,9 +24,52 @@ export default function Home({ data }) {
       )
     )
   }
+
+  const getShoppingList = async () => {
+    const query = 'quantity, ingredient (id, name)'
+    let { data, error } = await supabase
+      .from('recipe_ingredient')
+      .select(query)
+      .in('recipe_id', selectedRecipes)
+    if (error) {
+      console.log('Recipe error', error)
+    } else {
+      // Build the array correctly once getting data
+      const shoppingArr = data.map((item) => ({
+        id: item.ingredient.id,
+        name: item.ingredient.name,
+        quantity: item.quantity,
+      }))
+      const sumGroupbyArr = shoppingArr
+        .reduce((prev, next) => {
+          if (next.id in prev) {
+            prev[next.id].quantity += next.quantity
+          } else {
+            prev[next.id] = next
+          }
+          return prev
+        }, [])
+        .filter((item) => item !== null)
+      setShoppingList(sumGroupbyArr)
+    }
+  }
+
+  const sumGroupBy = (shoppingList) => {
+    const result = []
+    shoppingList.reduce((res, item) => {
+      // if the item does not exist in the accumulator push it in
+      if (!res[item.id]) {
+        res[item.id] = { id, name, quantity: 0 }
+        result.push(res[item.id])
+      }
+      res[item.id].quantity += item.quantity
+      setTest(res)
+    })
+  }
   return (
     <>
       <Navbar />
+      <Hero />
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>
@@ -47,6 +92,7 @@ export default function Home({ data }) {
               </>
             )
           })}
+          <Button onClick={getShoppingList}>Get Shopping</Button>
         </Box>
       </div>
     </>
