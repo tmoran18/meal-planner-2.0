@@ -39,6 +39,7 @@ const Recipe = ({
     <Box
       maxW='320px'
       minH='300px'
+      mb={8}
       boxShadow={
         isSelected
           ? '0 7px 13px rgba(0,0,0,0.15), 0 15px 40px rgba(0,0,0,0.2)'

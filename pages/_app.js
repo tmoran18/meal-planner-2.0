@@ -5,12 +5,20 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 const colors = {
   brand: {
     green: '#8BCF35',
-    800: '#153e75',
-    700: '#2a69ac',
+    dark_green: '#41B54A',
   },
 }
 
-const theme = extendTheme({ colors })
+const shadows = {
+  shadow: {
+    one: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+    two: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    three: '0 10px 20px rgba(0,0,0,0.10), 0 6px 20px rgba(0,0,0,0.10)',
+    four: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+    five: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)',
+  },
+}
+const theme = extendTheme({ colors, shadows })
 
 function MyApp({ Component, pageProps }) {
   return (

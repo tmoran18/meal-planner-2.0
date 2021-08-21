@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Textarea, Text, Button, Box } from '@chakra-ui/react'
+import { FormLabel, Textarea, Text, Box, Flex } from '@chakra-ui/react'
+import Button from '../components/Button'
 
 const Steps = ({ addSteps, steps }) => {
   let [value, setValue] = useState('')
@@ -18,12 +19,7 @@ const Steps = ({ addSteps, steps }) => {
 
   return (
     <Box mt='3'>
-      <Text
-        fontSize='14px'
-        fontWeight='500'
-        color='gray.500'
-        my='10px'
-      >{`Step ${steps.length + 1}`}</Text>
+      <FormLabel>{`Step ${steps.length + 1}`}</FormLabel>
       <Textarea
         value={value}
         onChange={handleInputChange}
@@ -31,19 +27,9 @@ const Steps = ({ addSteps, steps }) => {
         size='sm'
         bg='var(--l_grey)'
       />
-      <Button
-        onClick={onSubmit}
-        _hover={{
-          background: 'blue.600',
-        }}
-        bg='blue.500'
-        color='white'
-        mt='3'
-        mb='6'
-        type='submit'
-      >
-        Add Step
-      </Button>
+      <Flex justify='flex-end' mt={5}>
+        <Button onClickFunc={onSubmit}>Add Step</Button>
+      </Flex>
       {steps.length !== 0 && (
         <ul>
           {steps.map((step, index) => (

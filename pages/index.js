@@ -1,18 +1,24 @@
 import Head from 'next/head'
-import { useState } from 'react'
-import styles from '../styles/Home.module.css'
+import { useState, useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Flex, useDisclosure } from '@chakra-ui/react'
 import Navbar from '../components/Navbar'
 import Recipe from '../components/Recipe'
-import SelectedRecipesBadge from '../components/SelectedRecipesBadge'
 import Hero from '../components/Hero'
 import ShoppingListBtn from '../components/ShoppingListBtn'
+import SearchInput from '../components/SearchInput'
+import ShoppingList from '../components/ShoppingList'
 
 export default function Home({ data }) {
   const [selectedRecipes, setSelectedRecipes] = useState([])
   const [shoppingList, setShoppingList] = useState([])
-  const [test, setTest] = useState([])
+  const recipeRef = useRef()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const scrollToRecipe = () => {
+    //recipeRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    window.scrollBy({ top: 660, behavior: 'smooth' })
+  }
 
   const addRecipeSelectedRecipes = (recipeID) => {
     setSelectedRecipes((selectedRecipes) => [...selectedRecipes, recipeID])
@@ -52,6 +58,7 @@ export default function Home({ data }) {
         }, [])
         .filter((item) => item !== null)
       setShoppingList(sumGroupbyArr)
+      onOpen()
     }
   }
 
@@ -70,29 +77,52 @@ export default function Home({ data }) {
   return (
     <>
       <Navbar />
-      <Hero />
+      <Hero scroll={scrollToRecipe} />
       <Box maxW='70rem' m='auto'>
-        <Flex>
-        <ShoppingListBtn recipeCount={selectedRecipes.length} getShoppingList={getShoppingList}/>
-
+        <Flex
+          py={{ base: 12, md: 16 }}
+          px={4}
+          justifyContent='space-between'
+          direction={{ base: 'column', md: 'row' }}
+          align='center'
+        >
+          <ShoppingListBtn
+            recipeCount={selectedRecipes.length}
+            getShoppingList={getShoppingList}
+            onOpen={onOpen}
+          />
+          <SearchInput />
         </Flex>
-          <Box w='full' display='flex' justifyContent='space-around'>
-            {data.map((recipe) => {
-              return (
-                <>
-                  <Recipe
-                    id={recipe.id}
-                    name={recipe.name}
-                    name_secondary={recipe.name_secondary}
-                    imgurl={recipe.imgurl}
-                    addRecipeSelectedRecipes={addRecipeSelectedRecipes}
-                    removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
-                  />
-                </>
-              )
-            })}
-          </Box>
-        </Box>
+        <Flex
+          w='full'
+          justify='space-between'
+          px={6}
+          ref={recipeRef}
+          direction={{ base: 'column', md: 'row' }}
+          align={{ base: 'center' }}
+        >
+          {data.map((recipe) => {
+            return (
+              <>
+                <Recipe
+                  id={recipe.id}
+                  name={recipe.name}
+                  name_secondary={recipe.name_secondary}
+                  imgurl={recipe.imgurl}
+                  addRecipeSelectedRecipes={addRecipeSelectedRecipes}
+                  removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
+                />
+              </>
+            )
+          })}
+        </Flex>
+        {console.log(shoppingList)}
+        <ShoppingList
+          isOpen={isOpen}
+          onClose={onClose}
+          shoppingList={shoppingList}
+        />
+      </Box>
     </>
   )
 }

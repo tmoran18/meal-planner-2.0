@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { useMediaQuery } from '@chakra-ui/media-query'
 import { Flex, Box, Heading, Text } from '@chakra-ui/layout'
-const Hero = () => {
+import { Button, Link, VStack } from '@chakra-ui/react'
+const Hero = ({ scroll, onOpen }) => {
   const [isMobile] = useMediaQuery('(max-width: 800px)')
 
   return (
@@ -26,25 +27,35 @@ const Hero = () => {
           alt='Food in a bowl on a grey background'
         />
       )}
-      <Box
-        border='1px solid'
-        borderColor='red'
-        pos='absolute'
-        top={0}
-        w='full'
-        height='full'
-      >
+      <Box pos='absolute' top={0} w='full' height='full'>
         <Flex
-          border='1px solid'
-          borderColor='blue'
           maxW='70rem'
           height='full'
           m='auto'
           direction='column'
           justify='center'
+          px={6}
         >
-          <Heading as='h2'>Plan Your Meals Fast Today</Heading>
-          <Text>Choose your meals and get a shopping list ready fast</Text>
+          <VStack
+            align={{ base: 'center', md: 'flex-start' }}
+            textAlign={{ base: 'center', md: 'left' }}
+            spacing={6}
+          >
+            <Heading as='h2'>Plan Your Meals Fast</Heading>
+            <Text fontSize='18px' maxW='27rem'>
+              Quickly and easily choose your meals for the week, then just click
+              a button to generate your shopping list.
+            </Text>
+            <Button
+              display={{ base: 'none', md: 'block' }}
+              onClick={scroll}
+              bg='brand.green'
+              color='white'
+              borderRadius='100px'
+            >
+              Get Started Now
+            </Button>
+          </VStack>
         </Flex>
       </Box>
     </Flex>

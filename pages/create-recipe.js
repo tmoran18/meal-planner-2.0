@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import Image from 'next/image'
+import Head from 'next/head'
 import {
   FormControl,
   FormLabel,
   Input,
-  Button,
   Alert,
   AlertIcon,
   Text,
+  Box,
+  Flex,
 } from '@chakra-ui/react'
 
 import Navbar from '../components/Navbar'
 import CreateRecipeSteps from '../components/CreateRecipeSteps'
 import IngredientSelect from '../components/IngredientSelect'
+import Button from '../components/Button'
 
 export default function CreateRecipe() {
   const [steps, setSteps] = useState([])
@@ -123,57 +127,73 @@ export default function CreateRecipe() {
   }
   return (
     <>
+      <Head>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+      </Head>
+
       <Navbar />
-      <Text>Create Recipe</Text>
-      {showSuccessAlert && (
-        <Alert status='success' mb={5}>
-          <AlertIcon />
-          Recipe has been successfully added
-        </Alert>
-      )}
-      {showErrorAlert && (
-        <Alert status='error' mb={5}>
-          <AlertIcon />
-          There was an error creating your recipe
-        </Alert>
-      )}
-      <FormControl>
-        <FormLabel>Recipe Name</FormLabel>
-        <Input
-          placeholder='Recipe Name'
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-        />
-      </FormControl>
+      <Box maxW='35rem' w='full' m='5rem auto'>
+        <Text>Create Recipe</Text>
+        {showSuccessAlert && (
+          <Alert status='success' mb={5}>
+            <AlertIcon />
+            Recipe has been successfully added
+          </Alert>
+        )}
+        {showErrorAlert && (
+          <Alert status='error' mb={5}>
+            <AlertIcon />
+            There was an error creating your recipe
+          </Alert>
+        )}
+        <FormControl>
+          <FormLabel>Recipe Name</FormLabel>
+          <Input
+            placeholder='Recipe Name'
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+          />
+        </FormControl>
 
-      <FormControl mt={4}>
-        <FormLabel>Recipe Secondary Name</FormLabel>
-        <Input
-          placeholder='Recipe Secondary Name'
-          value={secondaryNameInput}
-          onChange={(e) => setSecondaryNameInput(e.target.value)}
-        />
-      </FormControl>
+        <FormControl mt={4}>
+          <FormLabel>Recipe Secondary Name</FormLabel>
+          <Input
+            placeholder='Recipe Secondary Name'
+            value={secondaryNameInput}
+            onChange={(e) => setSecondaryNameInput(e.target.value)}
+          />
+        </FormControl>
 
-      <FormControl mt={4}>
-        <FormLabel>Image URL</FormLabel>
-        <Input
-          placeholder='Image URL'
-          value={imageUrlInput}
-          onChange={(e) => setImageUrlInput(e.target.value)}
-        />
-      </FormControl>
+        <FormControl mt={4}>
+          <FormLabel>Image URL</FormLabel>
+          <Input
+            placeholder='Image URL'
+            value={imageUrlInput}
+            onChange={(e) => setImageUrlInput(e.target.value)}
+          />
+        </FormControl>
 
-      <CreateRecipeSteps steps={steps} addSteps={addSteps} />
-      <IngredientSelect
-        addRecipeIngredients={addRecipeIngredients}
-        recipeIngredients={recipeIngredients}
-        updateRecipeIngredientsQty={updateRecipeIngredientsQty}
-        removeRecipeIngredient={removeRecipeIngredient}
-      />
-      <Button onClick={insertRecipe} colorScheme='blue' mr={3}>
-        Save Recipe
-      </Button>
+        <CreateRecipeSteps steps={steps} addSteps={addSteps} />
+        <IngredientSelect
+          addRecipeIngredients={addRecipeIngredients}
+          recipeIngredients={recipeIngredients}
+          updateRecipeIngredientsQty={updateRecipeIngredientsQty}
+          removeRecipeIngredient={removeRecipeIngredient}
+        />
+        <Flex justify='flex-end' mt={5}>
+          <Button fullWidth onClickFunc={insertRecipe}>
+            Save Recipe
+          </Button>
+        </Flex>
+      </Box>
+      <Flex>
+        <Image
+          src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1629007518/meal-shopper/green_wave_2_ittxhj.svg'
+          width='3820'
+          height='452'
+          alt='green waves'
+        />
+      </Flex>
     </>
   )
 }

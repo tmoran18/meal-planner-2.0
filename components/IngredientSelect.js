@@ -12,6 +12,7 @@ import {
   VStack,
   Text,
   IconButton,
+  FormLabel,
 } from '@chakra-ui/react'
 
 import { CloseIcon } from '@chakra-ui/icons'
@@ -38,6 +39,7 @@ const IngredientSelect = ({
   }
   return (
     <>
+      <FormLabel>Add Ingredients</FormLabel>
       <Select
         mb={3}
         placeholder='Select option'
