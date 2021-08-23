@@ -1,19 +1,23 @@
-import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import { useState, useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, useDisclosure } from '@chakra-ui/react'
-import Navbar from '../components/Navbar'
 import Recipe from '../components/Recipe'
 import Hero from '../components/Hero'
 import ShoppingListBtn from '../components/ShoppingListBtn'
 import SearchInput from '../components/SearchInput'
 import ShoppingList from '../components/ShoppingList'
 
+const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
+  ssr: false,
+})
+
 export default function Home({ data }) {
   const [selectedRecipes, setSelectedRecipes] = useState([])
   const [shoppingList, setShoppingList] = useState([])
   const recipeRef = useRef()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [searchTerm, setSearchTerm] = useState('')
 
   const scrollToRecipe = () => {
     //recipeRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -29,6 +33,12 @@ export default function Home({ data }) {
       selectedRecipes.filter(
         (selectedRecipeID) => recipeID !== selectedRecipeID
       )
+    )
+  }
+
+  const searchFilter = (data) => {
+    return data.filter((recipe) =>
+      recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }
 
@@ -76,7 +86,7 @@ export default function Home({ data }) {
   }
   return (
     <>
-      <Navbar />
+      <DynamicNavbar />
       <Hero scroll={scrollToRecipe} />
       <Box maxW='70rem' m='auto'>
         <Flex
@@ -91,7 +101,7 @@ export default function Home({ data }) {
             getShoppingList={getShoppingList}
             onOpen={onOpen}
           />
-          <SearchInput />
+          <SearchInput setSearchTerm={setSearchTerm} />
         </Flex>
         <Flex
           w='full'
@@ -100,8 +110,9 @@ export default function Home({ data }) {
           ref={recipeRef}
           direction={{ base: 'column', md: 'row' }}
           align={{ base: 'center' }}
+          wrap='wrap'
         >
-          {data.map((recipe) => {
+          {searchFilter(data).map((recipe) => {
             return (
               <>
                 <Recipe
@@ -116,7 +127,6 @@ export default function Home({ data }) {
             )
           })}
         </Flex>
-        {console.log(shoppingList)}
         <ShoppingList
           isOpen={isOpen}
           onClose={onClose}

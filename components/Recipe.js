@@ -13,15 +13,15 @@ const Recipe = ({
 }) => {
   const [overlayOpacity, setoverlayOpacity] = useState('0.00')
   const [isHover, setIsHover] = useState(false)
-  const [isSelected, setIsSelected] = useBoolean()
+  const [isSelected, setIsSelected] = useState(false)
 
   const addSelected = (id) => {
-    setIsSelected.on
+    setIsSelected(true)
     addRecipeSelectedRecipes(id)
   }
 
   const removeSelected = (id) => {
-    setIsSelected.off
+    setIsSelected(false)
     removeRecipeSelectedRecipes(id)
   }
 
@@ -49,10 +49,10 @@ const Recipe = ({
       overflow='hidden'
       textAlign='center'
       bg={isSelected && 'rgba(136, 188, 127, 0.30)'}
+      // onClick={setIsSelected.toggle}
       cursor='pointer'
       onMouseEnter={onHover}
       onMouseLeave={onHover}
-      onClick={setIsSelected.toggle}
       position='relative'
     >
       <Image
@@ -61,44 +61,58 @@ const Recipe = ({
         height={200}
         alt={`${name} ${name_secondary}`}
       />
-      <Heading size='md' pt={2}>
-        {name}
-      </Heading>
-      <Heading size='sm'>{name_secondary}</Heading>
-      <Fade in={isHover}>
-        <Box
-          position='absolute'
-          top={0}
-          opacity={overlayOpacity}
-          bg='gray.600'
-          w='100%'
-          h='100%'
-          cursor='pointer'
-        ></Box>
-        {isSelected ? (
-          <MinusIcon
-            onClick={() => removeSelected(id)}
+      <Box px={3} pb={3}>
+        <Heading size='md' color='blackAlpha.700' fontWeight={600} pt={2}>
+          {name}
+        </Heading>
+        <Heading size='sm' color='blackAlpha.800' fontWeight={400}>
+          {name_secondary}
+        </Heading>
+        <Fade in={isHover}>
+          <Box
             position='absolute'
-            color='white'
-            w={24}
-            h={24}
+            top={0}
+            left={0}
+            opacity={overlayOpacity}
+            bg='gray.600'
+            w='100%'
+            h='100%'
             cursor='pointer'
-            top='85px'
-            left='112px'
-          />
-        ) : (
-          <AddIcon
-            onClick={() => addSelected(id)}
-            position='absolute'
-            color='white'
-            w={24}
-            h={24}
-            cursor='pointer'
-            top='30%'
-            left={{ base: '30%', md: '35%' }}
-          />
-        )}
-      </Fade>
+          ></Box>
+          {isSelected ? (
+            <MinusIcon
+              onClick={() => removeSelected(id)}
+              position='absolute'
+              color='white'
+              w={24}
+              h={24}
+              cursor='pointer'
+              top='30%'
+              left='35%'
+              border='1px solid'
+              borderColor='red.300'
+              borderRadius='100px'
+              bg='red.300'
+            />
+          ) : (
+            <AddIcon
+              onClick={() => addSelected(id)}
+              position='absolute'
+              color='white'
+              w={24}
+              h={24}
+              cursor='pointer'
+              top='30%'
+              left='35%'
+              border='1px solid'
+              borderColor='brand.green'
+              borderRadius='100px'
+              p={3}
+              bg='brand.green'
+            />
+          )}
+        </Fade>
+      </Box>
     </Box>
   )
 }

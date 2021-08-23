@@ -1,22 +1,26 @@
 import { useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Head from 'next/head'
 import {
   FormControl,
   FormLabel,
   Input,
-  Alert,
-  AlertIcon,
-  Text,
+  Heading,
   Box,
   Flex,
 } from '@chakra-ui/react'
+
+const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
+  ssr: false,
+})
 
 import Navbar from '../components/Navbar'
 import CreateRecipeSteps from '../components/CreateRecipeSteps'
 import IngredientSelect from '../components/IngredientSelect'
 import Button from '../components/Button'
+import Alert from '../components/Alert'
 
 export default function CreateRecipe() {
   const [steps, setSteps] = useState([])
@@ -114,7 +118,6 @@ export default function CreateRecipe() {
           setShowSuccessAlert(true)
           setTimeout(() => {
             setShowSuccessAlert(false)
-            onClose()
           }, 3000)
           setNameInput('')
           setSecondaryNameInput('')
@@ -131,20 +134,16 @@ export default function CreateRecipe() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
 
-      <Navbar />
-      <Box maxW='35rem' w='full' m='5rem auto'>
-        <Text>Create Recipe</Text>
+      <DynamicNavbar />
+      <Box maxW='35rem' p={5} w='full' m='auto'>
+        <Heading py={{ base: 3, md: 10 }} textAlign='center'>
+          Create Recipe
+        </Heading>
         {showSuccessAlert && (
-          <Alert status='success' mb={5}>
-            <AlertIcon />
-            Recipe has been successfully added
-          </Alert>
+          <Alert status='success'>Recipe has been successfully added</Alert>
         )}
         {showErrorAlert && (
-          <Alert status='error' mb={5}>
-            <AlertIcon />
-            There was an error creating your recipe
-          </Alert>
+          <Alert status='error'>There was an error creating your recipe</Alert>
         )}
         <FormControl>
           <FormLabel>Recipe Name</FormLabel>
@@ -189,8 +188,8 @@ export default function CreateRecipe() {
       <Flex>
         <Image
           src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1629007518/meal-shopper/green_wave_2_ittxhj.svg'
-          width='3820'
-          height='452'
+          width={3820}
+          height={452}
           alt='green waves'
         />
       </Flex>

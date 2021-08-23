@@ -1,7 +1,7 @@
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input'
 import { SearchIcon } from '@chakra-ui/icons'
 
-const SearchInput = ({ ref }) => {
+const SearchInput = ({ setSearchTerm }) => {
   return (
     <InputGroup maxW='25rem' display={{ base: 'none', md: 'flex' }}>
       <Input
@@ -11,6 +11,7 @@ const SearchInput = ({ ref }) => {
         borderRadius='100px'
         shadow='shadow.three'
         _focus={{ outline: 'none', shadow: 'shadow.four' }}
+        onChange={(e) => setSearchTerm(e.currentTarget.value)}
       />
       {/* eslint-disable-next-line react/no-children-prop */}
       <InputRightAddon
