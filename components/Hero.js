@@ -10,6 +10,7 @@ const Hero = ({ scroll, onOpen }) => {
       display='flex'
       justify='center'
       position='relative'
+      minH={64}
       bg='url(https://res.cloudinary.com/dsjhcek2q/image/upload/v1628851160/meal-shopper/green_wave_fvedoe.svg)'
     >
       {isMobile ? (
