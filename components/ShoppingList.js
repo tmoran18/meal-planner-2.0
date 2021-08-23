@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -17,13 +18,21 @@ import {
 } from '@chakra-ui/react'
 
 const ShoppingList = ({ isOpen, onClose, shoppingList }) => {
-  const { hasCopied, onCopy } = useClipboard('Test')
+  const [value, setValue] = useState('')
+  const { hasCopied, onCopy } = useClipboard(value)
+
+  useEffect(() => {
+    setValue(stringifyShoppingList)
+    // eslint-disable-next-line
+  }, [isOpen])
 
   const stringifyShoppingList = () => {
-    const shoppingStr = shoppingList.map(
-      (item) => `${item.name} x ${item.quantity} \n`
-    )
-    return shoppingStr.toString()
+    if (shoppingList.length > 1) {
+      const shoppingStr = shoppingList.map(
+        (item) => `${item.name} x ${item.quantity} \n`
+      )
+      return shoppingStr.toString().replace(/,/g, '')
+    }
   }
 
   return (
@@ -43,7 +52,7 @@ const ShoppingList = ({ isOpen, onClose, shoppingList }) => {
               </Thead>
               <Tbody>
                 {shoppingList.map((item) => (
-                  <Tr key='item.id'>
+                  <Tr key={item.id}>
                     <Td>{item.name}</Td>
                     <Td>{item.quantity}</Td>
                   </Tr>

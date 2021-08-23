@@ -20,7 +20,6 @@ export default function Home({ data }) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const scrollToRecipe = () => {
-    //recipeRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
     window.scrollBy({ top: 660, behavior: 'smooth' })
   }
 
@@ -72,18 +71,6 @@ export default function Home({ data }) {
     }
   }
 
-  const sumGroupBy = (shoppingList) => {
-    const result = []
-    shoppingList.reduce((res, item) => {
-      // if the item does not exist in the accumulator push it in
-      if (!res[item.id]) {
-        res[item.id] = { id, name, quantity: 0 }
-        result.push(res[item.id])
-      }
-      res[item.id].quantity += item.quantity
-      setTest(res)
-    })
-  }
   return (
     <>
       <DynamicNavbar />
@@ -114,7 +101,7 @@ export default function Home({ data }) {
         >
           {searchFilter(data).map((recipe) => {
             return (
-              <>
+              <Box key={recipe.id}>
                 <Recipe
                   id={recipe.id}
                   name={recipe.name}
@@ -123,7 +110,7 @@ export default function Home({ data }) {
                   addRecipeSelectedRecipes={addRecipeSelectedRecipes}
                   removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
                 />
-              </>
+              </Box>
             )
           })}
         </Flex>
