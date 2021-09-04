@@ -11,6 +11,7 @@ import {
   Box,
   Flex,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import LoginModal from '../components/LoginModal'
 import { useUser } from '../lib/UserContext'
@@ -26,6 +27,7 @@ import Alert from '../components/Alert'
 
 export default function CreateRecipe() {
   const { user } = useUser()
+  const toast = useToast()
   const [steps, setSteps] = useState([])
   const [recipeIngredients, setRecipeIngredients] = useState([])
 
@@ -41,6 +43,22 @@ export default function CreateRecipe() {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure()
+
+  useEffect(() => {
+    if (!user) {
+      {
+        toast({
+          id: 1,
+          title: 'You must be logged in as an administrator to create a recipe',
+          position: 'top-right',
+          isClosable: true,
+          duration: null,
+        })
+      }
+    } else {
+      toast.closeAll()
+    }
+  }, [user])
 
   const addSteps = (step) => {
     setSteps((steps) => [...steps, step])
@@ -146,6 +164,7 @@ export default function CreateRecipe() {
 
       <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
       <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
+
       <Box maxW='35rem' p={5} w='full' m='auto'>
         <Heading py={{ base: 3, md: 10 }} textAlign='center'>
           Create Recipe

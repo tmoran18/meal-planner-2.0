@@ -21,6 +21,7 @@ import {
   Divider,
   Heading,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import Button from '../components/Button'
 import Alert from '../components/Alert'
@@ -33,6 +34,7 @@ const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
 
 const Ingredients = ({ data }) => {
   const { user } = useUser()
+  const toast = useToast()
   const [nameInput, setNameInput] = useState('')
   const [foodGroupValue, setFoodGroupValue] = useState('1')
 
@@ -41,6 +43,23 @@ const Ingredients = ({ data }) => {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure()
+
+  useEffect(() => {
+    if (!user) {
+      {
+        toast({
+          id: 1,
+          title:
+            'You must be logged in as an administrator to create or delete an ingredient',
+          position: 'top-right',
+          isClosable: true,
+          duration: null,
+        })
+      }
+    } else {
+      toast.closeAll()
+    }
+  }, [user])
 
   const insertIngredient = async () => {
     // Check if all the fields are filled out
@@ -97,7 +116,9 @@ const Ingredients = ({ data }) => {
           <Alert status='success'>Ingredient Successfully Added</Alert>
         )}
         {showErrorAlert && (
-          <Alert status='error'>Error Inserting Successfully Added</Alert>
+          <Alert status='error'>
+            Error creating new ingredient: Are you logged in?
+          </Alert>
         )}
         <Heading py={{ base: 3, md: 10 }} textAlign='center'>
           Create Ingredient
@@ -105,7 +126,7 @@ const Ingredients = ({ data }) => {
         <FormControl>
           <FormLabel>Ingredient Name</FormLabel>
           <Input
-            placeholder='Recipe Name'
+            placeholder='Ingredient Name'
             value={nameInput}
             onChange={(e) => setNameInput(e.target.value)}
           />
