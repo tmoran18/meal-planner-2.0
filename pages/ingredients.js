@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useUser } from '../lib/UserContext'
 import { supabase } from '../utils/supabaseClient'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
@@ -19,18 +20,27 @@ import {
   Flex,
   Divider,
   Heading,
+  useDisclosure,
 } from '@chakra-ui/react'
 import Button from '../components/Button'
 import Alert from '../components/Alert'
 import Accordion from '../components/Accordion'
+import LoginModal from '../components/LoginModal'
 
 const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
   ssr: false,
 })
 
 const Ingredients = ({ data }) => {
+  const { user } = useUser()
   const [nameInput, setNameInput] = useState('')
   const [foodGroupValue, setFoodGroupValue] = useState('1')
+
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure()
 
   const insertIngredient = async () => {
     // Check if all the fields are filled out
@@ -80,7 +90,8 @@ const Ingredients = ({ data }) => {
 
   return (
     <>
-      <DynamicNavbar />
+      <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
+      <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
       <Box p={5} maxW='30rem' m='auto'>
         {showSuccessAlert && (
           <Alert status='success'>Ingredient Successfully Added</Alert>
@@ -143,6 +154,7 @@ const Ingredients = ({ data }) => {
               <Tr>
                 <Th>Current Ingredient List</Th>
                 <Th textAlign='right'>Food Group</Th>
+                <Th textAlign='right'>Delete</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -154,6 +166,7 @@ const Ingredients = ({ data }) => {
                     <Td textAlign='right'>
                       {foodGroupArr[ingredient.food_group_id]}
                     </Td>
+                    <Td textAlign='right'>X</Td>
                   </Tr>
                 ))}
             </Tbody>
@@ -174,12 +187,12 @@ const Ingredients = ({ data }) => {
 
 export default Ingredients
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ req }) {
   let { data, error } = await supabase.from('ingredient').select('*')
 
   return {
     props: {
-      data: data,
+      data,
     }, // will be passed to the page component as props
   }
 }

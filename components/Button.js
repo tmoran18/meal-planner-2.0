@@ -6,7 +6,6 @@ const Button = ({ children, onClickFunc, fullWidth }) => {
     <ChakraButton
       color='white'
       boxShadow='shadow.three'
-      py={6}
       px={5}
       borderRadius='100px'
       bg='brand.green'

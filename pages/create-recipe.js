@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -10,19 +10,22 @@ import {
   Heading,
   Box,
   Flex,
+  useDisclosure,
 } from '@chakra-ui/react'
+import LoginModal from '../components/LoginModal'
+import { useUser } from '../lib/UserContext'
 
 const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
   ssr: false,
 })
 
-import Navbar from '../components/Navbar'
 import CreateRecipeSteps from '../components/CreateRecipeSteps'
 import IngredientSelect from '../components/IngredientSelect'
 import Button from '../components/Button'
 import Alert from '../components/Alert'
 
 export default function CreateRecipe() {
+  const { user } = useUser()
   const [steps, setSteps] = useState([])
   const [recipeIngredients, setRecipeIngredients] = useState([])
 
@@ -32,6 +35,12 @@ export default function CreateRecipe() {
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showErrorAlert, setShowErrorAlert] = useState(false)
+
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure()
 
   const addSteps = (step) => {
     setSteps((steps) => [...steps, step])
@@ -128,13 +137,15 @@ export default function CreateRecipe() {
       }
     }
   }
+
   return (
     <>
       <Head>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
 
-      <DynamicNavbar />
+      <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
+      <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
       <Box maxW='35rem' p={5} w='full' m='auto'>
         <Heading py={{ base: 3, md: 10 }} textAlign='center'>
           Create Recipe

@@ -7,17 +7,26 @@ import Hero from '../components/Hero'
 import ShoppingListBtn from '../components/ShoppingListBtn'
 import SearchInput from '../components/SearchInput'
 import ShoppingList from '../components/ShoppingList'
+import LoginModal from '../components/LoginModal'
+import { useUser } from '../lib/UserContext'
 
+// Required to get Navbar working correctly with SSR
 const DynamicNavbar = dynamic(() => import('../components/Navbar'), {
   ssr: false,
 })
 
-export default function Home({ data }) {
+export default function Home({ recipes }) {
+  const { user } = useUser()
   const [selectedRecipes, setSelectedRecipes] = useState([])
   const [shoppingList, setShoppingList] = useState([])
   const recipeRef = useRef()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [searchTerm, setSearchTerm] = useState('')
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure()
 
   const scrollToRecipe = () => {
     window.scrollBy({ top: 660, behavior: 'smooth' })
@@ -35,8 +44,8 @@ export default function Home({ data }) {
     )
   }
 
-  const searchFilter = (data) => {
-    return data.filter((recipe) =>
+  const searchFilter = (recipes) => {
+    return recipes.filter((recipe) =>
       recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }
@@ -73,7 +82,8 @@ export default function Home({ data }) {
 
   return (
     <>
-      <DynamicNavbar />
+      <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
+      <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
       <Hero scroll={scrollToRecipe} />
       <Box maxW='70rem' m='auto'>
         <Flex
@@ -99,7 +109,7 @@ export default function Home({ data }) {
           align={{ base: 'center' }}
           wrap='wrap'
         >
-          {searchFilter(data).map((recipe) => {
+          {searchFilter(recipes).map((recipe) => {
             return (
               <Box key={recipe.id}>
                 <Recipe
@@ -124,12 +134,12 @@ export default function Home({ data }) {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   let { data, error } = await supabase.from('recipe').select('*')
 
   return {
     props: {
-      data: data,
+      recipes: data,
     }, // will be passed to the page component as props
   }
 }

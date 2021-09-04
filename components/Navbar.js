@@ -1,6 +1,6 @@
+import { useState, useEffect } from 'react'
 import {
   Box,
-  Text,
   Flex,
   HStack,
   Link,
@@ -10,21 +10,29 @@ import {
   Stack,
   VStack,
   Collapse,
+  Button,
 } from '@chakra-ui/react'
 
 import Image from 'next/image'
-
+import { supabase } from '../utils/supabaseClient'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 // import MobileMenu from './MobileMenu'
 
-const Navbar = () => {
+const Navbar = ({ isAuthed, onModalOpen }) => {
   const [isMobile] = useMediaQuery('(max-width: 800px)')
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  return <Box>{isMobile ? <MobileNav /> : <DesktopNav />}</Box>
+  return (
+    <Box>
+      {isMobile ? (
+        <MobileNav onModalOpen={onModalOpen} />
+      ) : (
+        <DesktopNav isAuthed={isAuthed} onModalOpen={onModalOpen} />
+      )}
+    </Box>
+  )
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ isAuthed, onModalOpen }) => {
   return (
     <Box>
       <Box maxW='70rem' m='auto' pl={5}>
@@ -51,14 +59,20 @@ const DesktopNav = () => {
               <Link href='/ingredients'>Ingredients</Link>
             </HStack>
           </HStack>
-          <Link href='/#'>Admin</Link>
+          {!isAuthed ? (
+            <Link onClick={onModalOpen}>Admin Login</Link>
+          ) : (
+            <Link bg='none' onClick={() => supabase.auth.signOut()}>
+              Logout
+            </Link>
+          )}
         </Flex>
       </Box>
     </Box>
   )
 }
 
-const MobileNav = () => {
+const MobileNav = ({ user }) => {
   const { isOpen, onToggle } = useDisclosure()
   return (
     <Box>

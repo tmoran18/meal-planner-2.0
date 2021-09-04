@@ -1,5 +1,7 @@
 import '../styles/globals.css'
+import { UserContextProvider } from '../lib/UserContext'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { supabase } from '../utils/supabaseClient'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -22,9 +24,11 @@ const theme = extendTheme({ colors, shadows })
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <UserContextProvider supabaseClient={supabase}>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </UserContextProvider>
   )
 }
 export default MyApp
