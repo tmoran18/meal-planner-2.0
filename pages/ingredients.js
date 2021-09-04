@@ -46,15 +46,17 @@ const Ingredients = ({ data }) => {
 
   useEffect(() => {
     if (!user) {
-      {
-        toast({
-          id: 1,
-          title:
-            'You must be logged in as an administrator to create or delete an ingredient',
-          position: 'top-right',
-          isClosable: true,
-          duration: null,
-        })
+      if (!toast.isActive(1)) {
+        {
+          toast({
+            id: 1,
+            title:
+              'You must be logged in as an administrator to create or delete an ingredient',
+            position: 'top-right',
+            isClosable: true,
+            duration: null,
+          })
+        }
       }
     } else {
       toast.closeAll()
