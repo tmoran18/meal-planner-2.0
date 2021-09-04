@@ -163,9 +163,20 @@ const Ingredients = ({ data }) => {
             </Radio>
           </VStack>
           <Flex w='full' justify='flex-end' mt={5}>
-            <Button fullWidth onClickFunc={insertIngredient}>
-              Create Ingredient
-            </Button>
+            {!user ? (
+              <Button
+                fullWidth
+                onClickFunc={() =>
+                  alert('You must be logged in to create an ingredient')
+                }
+              >
+                Create Ingredient
+              </Button>
+            ) : (
+              <Button fullWidth onClickFunc={insertIngredient}>
+                Create Ingredient
+              </Button>
+            )}
           </Flex>
         </RadioGroup>
         <Divider mt={10} />

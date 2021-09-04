@@ -46,14 +46,17 @@ export default function CreateRecipe() {
 
   useEffect(() => {
     if (!user) {
-      {
-        toast({
-          id: 1,
-          title: 'You must be logged in as an administrator to create a recipe',
-          position: 'top-right',
-          isClosable: true,
-          duration: null,
-        })
+      if (!toast.isActive(1)) {
+        {
+          toast({
+            id: 1,
+            title:
+              'You must be logged in as an administrator to create a recipe',
+            position: 'top-right',
+            isClosable: true,
+            duration: null,
+          })
+        }
       }
     } else {
       toast.closeAll()
@@ -210,9 +213,20 @@ export default function CreateRecipe() {
           removeRecipeIngredient={removeRecipeIngredient}
         />
         <Flex justify='flex-end' mt={5}>
-          <Button fullWidth onClickFunc={insertRecipe}>
-            Save Recipe
-          </Button>
+          {!user ? (
+            <Button
+              fullWidth
+              onClickFunc={() =>
+                alert('You must be logged in to create a recipe')
+              }
+            >
+              Save Recipe!
+            </Button>
+          ) : (
+            <Button fullWidth onClickFunc={insertRecipe}>
+              Save Recipe
+            </Button>
+          )}
         </Flex>
       </Box>
       <Flex>
