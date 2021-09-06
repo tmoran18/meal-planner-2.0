@@ -37,6 +37,9 @@ const Ingredients = ({ data }) => {
   const toast = useToast()
   const [nameInput, setNameInput] = useState('')
   const [foodGroupValue, setFoodGroupValue] = useState('1')
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [showErrorAlert, setShowErrorAlert] = useState(false)
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false)
 
   const {
     isOpen: isModalOpen,
@@ -93,6 +96,24 @@ const Ingredients = ({ data }) => {
     }
   }
 
+  const deleteIngredient = async (id) => {
+    // Delete an ingredient
+    let { data, error } = await supabase
+      .from('ingredient')
+      .delete()
+      .match({ id })
+    // Fire off error
+    if (error) {
+      console.log('Delete Ingredient error', error)
+    } else {
+      setShowDeleteSuccess(true)
+      setTimeout(() => {
+        setShowDeleteSuccess(false)
+        // location.reload()
+      }, 3000)
+    }
+  }
+
   const foodGroupArr = [
     '',
     'Meat',
@@ -105,9 +126,6 @@ const Ingredients = ({ data }) => {
     'Other',
     'Frozen Food',
   ]
-
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
 
   return (
     <>
@@ -200,12 +218,24 @@ const Ingredients = ({ data }) => {
                     <Td textAlign='right'>
                       {foodGroupArr[ingredient.food_group_id]}
                     </Td>
-                    <Td textAlign='right'>X</Td>
+                    <Td
+                      color='red'
+                      fontWeight='bold'
+                      cursor='pointer'
+                      textAlign='right'
+                      _hover={{ fontSize: '17px' }}
+                      onClick={() => deleteIngredient(ingredient.id)}
+                    >
+                      x
+                    </Td>
                   </Tr>
                 ))}
             </Tbody>
           </Table>
         </Accordion>
+        {showDeleteSuccess && (
+          <Alert status='success'>Ingredient Successfully Deleted</Alert>
+        )}
       </Box>
       <Flex>
         <Image
