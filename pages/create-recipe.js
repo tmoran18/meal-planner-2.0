@@ -164,78 +164,83 @@ export default function CreateRecipe() {
       <Head>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
+      <Flex direction='column' justify='space-between' minH='100vh'>
+        <Box>
+          <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
+          <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
 
-      <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
-      <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
+          <Box maxW='35rem' p={5} w='full' m='auto'>
+            <Heading py={{ base: 3, md: 10 }} textAlign='center'>
+              Create Recipe
+            </Heading>
+            {showSuccessAlert && (
+              <Alert status='success'>Recipe has been successfully added</Alert>
+            )}
+            {showErrorAlert && (
+              <Alert status='error'>
+                There was an error creating your recipe
+              </Alert>
+            )}
+            <FormControl>
+              <FormLabel>Recipe Name</FormLabel>
+              <Input
+                placeholder='Recipe Name'
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+              />
+            </FormControl>
 
-      <Box maxW='35rem' p={5} w='full' m='auto'>
-        <Heading py={{ base: 3, md: 10 }} textAlign='center'>
-          Create Recipe
-        </Heading>
-        {showSuccessAlert && (
-          <Alert status='success'>Recipe has been successfully added</Alert>
-        )}
-        {showErrorAlert && (
-          <Alert status='error'>There was an error creating your recipe</Alert>
-        )}
-        <FormControl>
-          <FormLabel>Recipe Name</FormLabel>
-          <Input
-            placeholder='Recipe Name'
-            value={nameInput}
-            onChange={(e) => setNameInput(e.target.value)}
+            <FormControl mt={4}>
+              <FormLabel>Recipe Secondary Name</FormLabel>
+              <Input
+                placeholder='Recipe Secondary Name'
+                value={secondaryNameInput}
+                onChange={(e) => setSecondaryNameInput(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Image URL</FormLabel>
+              <Input
+                placeholder='Image URL'
+                value={imageUrlInput}
+                onChange={(e) => setImageUrlInput(e.target.value)}
+              />
+            </FormControl>
+
+            <CreateRecipeSteps steps={steps} addSteps={addSteps} />
+            <IngredientSelect
+              addRecipeIngredients={addRecipeIngredients}
+              recipeIngredients={recipeIngredients}
+              updateRecipeIngredientsQty={updateRecipeIngredientsQty}
+              removeRecipeIngredient={removeRecipeIngredient}
+            />
+            <Flex justify='flex-end' mt={5}>
+              {!user ? (
+                <Button
+                  fullWidth
+                  onClickFunc={() =>
+                    alert('You must be logged in to create a recipe')
+                  }
+                >
+                  Save Recipe!
+                </Button>
+              ) : (
+                <Button fullWidth onClickFunc={insertRecipe}>
+                  Save Recipe
+                </Button>
+              )}
+            </Flex>
+          </Box>
+        </Box>
+        <Flex>
+          <Image
+            src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1629007518/meal-shopper/green_wave_2_ittxhj.svg'
+            width={3820}
+            height={452}
+            alt='green waves'
           />
-        </FormControl>
-
-        <FormControl mt={4}>
-          <FormLabel>Recipe Secondary Name</FormLabel>
-          <Input
-            placeholder='Recipe Secondary Name'
-            value={secondaryNameInput}
-            onChange={(e) => setSecondaryNameInput(e.target.value)}
-          />
-        </FormControl>
-
-        <FormControl mt={4}>
-          <FormLabel>Image URL</FormLabel>
-          <Input
-            placeholder='Image URL'
-            value={imageUrlInput}
-            onChange={(e) => setImageUrlInput(e.target.value)}
-          />
-        </FormControl>
-
-        <CreateRecipeSteps steps={steps} addSteps={addSteps} />
-        <IngredientSelect
-          addRecipeIngredients={addRecipeIngredients}
-          recipeIngredients={recipeIngredients}
-          updateRecipeIngredientsQty={updateRecipeIngredientsQty}
-          removeRecipeIngredient={removeRecipeIngredient}
-        />
-        <Flex justify='flex-end' mt={5}>
-          {!user ? (
-            <Button
-              fullWidth
-              onClickFunc={() =>
-                alert('You must be logged in to create a recipe')
-              }
-            >
-              Save Recipe!
-            </Button>
-          ) : (
-            <Button fullWidth onClickFunc={insertRecipe}>
-              Save Recipe
-            </Button>
-          )}
         </Flex>
-      </Box>
-      <Flex>
-        <Image
-          src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1629007518/meal-shopper/green_wave_2_ittxhj.svg'
-          width={3820}
-          height={452}
-          alt='green waves'
-        />
       </Flex>
     </>
   )

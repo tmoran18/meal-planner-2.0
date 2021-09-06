@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { useState, useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
@@ -82,54 +83,66 @@ export default function Home({ recipes }) {
 
   return (
     <>
-      <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
-      <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
-      <Hero scroll={scrollToRecipe} />
-      <Box maxW='70rem' m='auto'>
-        <Flex
-          py={{ base: 12, md: 16 }}
-          px={4}
-          justifyContent='space-between'
-          direction={{ base: 'column', md: 'row' }}
-          align='center'
-        >
-          <ShoppingListBtn
-            recipeCount={selectedRecipes.length}
-            getShoppingList={getShoppingList}
-            onOpen={onOpen}
+      <Flex direction='column' justify='space-between' minH='100vh'>
+        <Box>
+          <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />
+          <LoginModal isOpen={isModalOpen} onClose={onModalClose} />
+          <Hero scroll={scrollToRecipe} />
+          <Box maxW='70rem' m='auto'>
+            <Flex
+              py={{ base: 12, md: 16 }}
+              px={4}
+              justifyContent='space-between'
+              direction={{ base: 'column', md: 'row' }}
+              align='center'
+            >
+              <ShoppingListBtn
+                recipeCount={selectedRecipes.length}
+                getShoppingList={getShoppingList}
+                onOpen={onOpen}
+              />
+              <SearchInput setSearchTerm={setSearchTerm} />
+            </Flex>
+            <Flex
+              w='full'
+              justify='space-between'
+              px={6}
+              ref={recipeRef}
+              direction={{ base: 'column', md: 'row' }}
+              align={{ base: 'center' }}
+              wrap='wrap'
+            >
+              {searchFilter(recipes).map((recipe) => {
+                return (
+                  <Box key={recipe.id}>
+                    <Recipe
+                      id={recipe.id}
+                      name={recipe.name}
+                      name_secondary={recipe.name_secondary}
+                      imgurl={recipe.imgurl}
+                      addRecipeSelectedRecipes={addRecipeSelectedRecipes}
+                      removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
+                    />
+                  </Box>
+                )
+              })}
+            </Flex>
+            <ShoppingList
+              isOpen={isOpen}
+              onClose={onClose}
+              shoppingList={shoppingList}
+            />
+          </Box>
+        </Box>
+        <Flex>
+          <Image
+            src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1630927613/meal-shopper/green_wave_4_lonakj.svg'
+            width={3820}
+            height={325}
+            alt='green waves'
           />
-          <SearchInput setSearchTerm={setSearchTerm} />
         </Flex>
-        <Flex
-          w='full'
-          justify='space-between'
-          px={6}
-          ref={recipeRef}
-          direction={{ base: 'column', md: 'row' }}
-          align={{ base: 'center' }}
-          wrap='wrap'
-        >
-          {searchFilter(recipes).map((recipe) => {
-            return (
-              <Box key={recipe.id}>
-                <Recipe
-                  id={recipe.id}
-                  name={recipe.name}
-                  name_secondary={recipe.name_secondary}
-                  imgurl={recipe.imgurl}
-                  addRecipeSelectedRecipes={addRecipeSelectedRecipes}
-                  removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
-                />
-              </Box>
-            )
-          })}
-        </Flex>
-        <ShoppingList
-          isOpen={isOpen}
-          onClose={onClose}
-          shoppingList={shoppingList}
-        />
-      </Box>
+      </Flex>
     </>
   )
 }
