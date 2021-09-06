@@ -47,14 +47,16 @@ const ShoppingList = ({ isOpen, onClose, shoppingList }) => {
               <Thead>
                 <Tr>
                   <Th>List Item</Th>
-                  <Th>Quantity</Th>
+                  <Th textAlign='right'>Quantity</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {shoppingList.map((item) => (
                   <Tr key={item.id}>
                     <Td>{item.name}</Td>
-                    <Td>{item.quantity}</Td>
+                    <Td textAlign='center' width={10}>
+                      {item.quantity}
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
