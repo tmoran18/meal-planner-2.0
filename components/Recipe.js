@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { Box, Heading, useBoolean, Fade } from '@chakra-ui/react'
+import { Box, Heading, Fade } from '@chakra-ui/react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import Image from 'next/image'
+import ViewRecipe from './ViewRecipe'
 
 const Recipe = ({
   id,
   name,
   name_secondary,
   imgurl,
+  steps,
   addRecipeSelectedRecipes,
   removeRecipeSelectedRecipes,
 }) => {
@@ -55,6 +57,12 @@ const Recipe = ({
       onMouseLeave={onHover}
       position='relative'
     >
+      <ViewRecipe
+        imgurl={imgurl}
+        name={name}
+        name_secondary={name_secondary}
+        steps={steps}
+      />
       <Image
         src={imgurl}
         width={320}

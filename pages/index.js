@@ -120,6 +120,7 @@ export default function Home({ recipes }) {
                       name={recipe.name}
                       name_secondary={recipe.name_secondary}
                       imgurl={recipe.imgurl}
+                      steps={recipe.steps}
                       addRecipeSelectedRecipes={addRecipeSelectedRecipes}
                       removeRecipeSelectedRecipes={removeRecipeSelectedRecipes}
                     />
