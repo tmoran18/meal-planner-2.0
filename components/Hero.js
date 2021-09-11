@@ -1,6 +1,6 @@
-//import Image from 'next/image'
+import Image from 'next/image'
 import { useMediaQuery } from '@chakra-ui/media-query'
-import { Flex, Box, Heading, Text, Image } from '@chakra-ui/react'
+import { Flex, Box, Heading, Text } from '@chakra-ui/layout'
 import { Button, Link, VStack } from '@chakra-ui/react'
 const Hero = ({ scroll, onOpen }) => {
   const [isMobile] = useMediaQuery('(max-width: 800px)')
@@ -14,15 +14,20 @@ const Hero = ({ scroll, onOpen }) => {
       bg='url(https://res.cloudinary.com/dsjhcek2q/image/upload/v1628851160/meal-shopper/green_wave_fvedoe.svg)'
     >
       {isMobile ? (
-        <img
+        <Image
           src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1628847931/meal-shopper/meal_hero_mobile_wxaxrn.jpg'
-          width='799'
+          width={799}
+          height={439}
           alt='Grey background with green leaves'
+          priority
         />
       ) : (
         <Image
           src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1628845315/meal-shopper/meal_hero_o1qrc0.jpg'
+          width={1920}
+          height={482}
           alt='Food in a bowl on a grey background'
+          priority
         />
       )}
       <Box pos='absolute' top={0} w='full' height='full'>
