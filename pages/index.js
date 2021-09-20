@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { useState, useRef } from 'react'
 import { supabase } from '../utils/supabaseClient'
@@ -83,6 +84,10 @@ export default function Home({ recipes }) {
 
   return (
     <>
+      <Head>
+        <title>Meal Planner</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+      </Head>
       <Flex direction='column' justify='space-between' minH='100vh'>
         <Box>
           <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUser } from '../lib/UserContext'
 import { supabase } from '../utils/supabaseClient'
 import Image from 'next/image'
+import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import {
   Box,
@@ -129,6 +130,10 @@ const Ingredients = ({ data }) => {
 
   return (
     <>
+      <Head>
+        <title>Meal Planner | Create Ingredient</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+      </Head>
       <Flex direction='column' justify='space-between' minH='100vh'>
         <Box>
           <DynamicNavbar onModalOpen={onModalOpen} isAuthed={user} />

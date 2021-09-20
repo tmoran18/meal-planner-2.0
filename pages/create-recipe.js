@@ -162,7 +162,8 @@ export default function CreateRecipe() {
   return (
     <>
       <Head>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <title>Meal Planner | Create Recipe</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       </Head>
       <Flex direction='column' justify='space-between' minH='100vh'>
         <Box>
