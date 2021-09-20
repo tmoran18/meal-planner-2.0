@@ -3,7 +3,16 @@ import { useMediaQuery } from '@chakra-ui/media-query'
 import { Flex, Box, Heading, Text } from '@chakra-ui/layout'
 import { Button, Link, VStack } from '@chakra-ui/react'
 const Hero = ({ scroll, onOpen }) => {
+  const [isMinWidthMobile, setIsMinWidthMobile] = useState(false)
   const [isMobile] = useMediaQuery('(max-width: 800px)')
+
+  useEffect(() => {
+    if (isMobile !== isMinWidthMobile) {
+      setIsMinWidthMobile(isMobile)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile])
 
   return (
     <Flex
@@ -13,7 +22,7 @@ const Hero = ({ scroll, onOpen }) => {
       minH={64}
       bg='url(https://res.cloudinary.com/dsjhcek2q/image/upload/v1628851160/meal-shopper/green_wave_fvedoe.svg)'
     >
-      {isMobile ? (
+      {isMinWidthMobile ? (
         <Image
           src='https://res.cloudinary.com/dsjhcek2q/image/upload/v1628847931/meal-shopper/meal_hero_mobile_wxaxrn.jpg'
           width={799}
