@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
 import { useMediaQuery } from '@chakra-ui/media-query'
 import { Flex, Box, Heading, Text } from '@chakra-ui/layout'
 import { Button, Link, VStack } from '@chakra-ui/react'
